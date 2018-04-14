@@ -1,7 +1,7 @@
 
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const bodyParser = require('body-parser');
 const env = 'development';
 const config = require('./knex')[env];
@@ -19,6 +19,13 @@ app.get('/test', (req, res) => {
 })
 app.use(cors({ exposedHeaders: 'Auth'}))//, allowedHeaders: '*'
 
+
+let users = require('./routes/users.js');
+let games = require('./routes/games.js');
+
+app.use('',users );
+app.use('',games );
+
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {
     console.log(`listening on: ${port}!`)
@@ -33,7 +40,7 @@ CREATE TABLE users (
     password    VARCHAR,
     gamesPlayed INT,
     captures    INT,
-    caugh       INT
+    caught       INT
 );
 
 CREATE TABLE games(

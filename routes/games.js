@@ -7,9 +7,10 @@ let placeholder=()=>{}
 
 app.get('/createGame', placeholder)
 app.get('/joinGame', placeholder)
-app.get('/findGames', placeholder)
+app.get('/findGames', controller.findGame)
 app.get('/getActiveUsers', placeholder)
 app.get('/playAgain', placeholder)
+app.get('/updateLocation', placeholder)
 // app.get('', placeholder)
 // app.get('', placeholder)
 

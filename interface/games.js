@@ -27,7 +27,8 @@ let exportMe ={
     })
   },
   findGame: (req, res)=>{
-    data.findGame()
+    console.log('findgame called.')
+    data.getGames()
     .then(results=>{
       return res.status(200).send(results);
     })
@@ -46,6 +47,15 @@ let exportMe ={
   },
   playAgain: (req, res)=>{
     data.playAgain(req.body.gameID)
+    .then(results=>{
+      return res.status(200).send(results);
+    })
+    .catch(err=>{
+      res.status(300).send(err);
+    })
+  },
+  updateLocation: (req, res)=>{
+    data.updateLocation(req.body.gameID, req.body.uid, req.body.pLat, req.body.pLong)
     .then(results=>{
       return res.status(200).send(results);
     })
