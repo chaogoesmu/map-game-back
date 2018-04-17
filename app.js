@@ -11,13 +11,13 @@ const cors = require('cors')
 app.disable('x-powered-by');
 
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
-
+app.use(cors({ exposedHeaders: 'Auth'}))//, allowedHeaders: '*'
 app.use(bodyParser.json());
 app.get('/test', (req, res) => {
   console.log(req.headers)
   res.json({})
 })
-app.use(cors({ exposedHeaders: 'Auth'}))//, allowedHeaders: '*'
+
 
 
 let users = require('./routes/users.js');
