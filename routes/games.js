@@ -1,17 +1,20 @@
 const express = require('express');
 const app = express();
 const controller = require('../interface/games.js');
-let placeholder=()=>{}
+let placeholder=(req,res)=>{return res.status(200).send('placholder');}
 
 //app.get('/path', token, function)
 
-app.get('/createGame', placeholder)
-app.get('/joinGame', placeholder)
+app.post('/createGame', controller.createGame)//
+app.post('/joinGame', controller.joinGame)
 app.get('/findGames', controller.findGame)
-app.get('/getActiveUsers', placeholder)
+app.post('/getActiveUsers', controller.getActiveUsers)
+app.post('/capture', controller.capture)
 app.get('/playAgain', placeholder)
-app.get('/updateLocation', placeholder)
-// app.get('', placeholder)
-// app.get('', placeholder)
+app.get('/updateLocation', controller.updateLocation)
+app.post('/quit', controller.quit)
+app.post('/updateItLocation', controller.updateItLocation)
+app.post('/getItLocation', controller.updateItLocation)
+app.post('/deleteGame', controller.deleteGame)
 
 module.exports = app;

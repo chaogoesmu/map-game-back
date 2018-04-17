@@ -6,15 +6,19 @@ let exportMe = {
   createGame: (userID, roomName, pLat, pLong)=>{
     //code to create a new game
     return knex('games')
+    .returning('id')
     .insert({
       pid:userID,
       name: roomName,
-      startLat: pLat,
-      startLong: pLong
+      open: true,
+      startlat: pLat,
+      startlong: pLong
     });
   },
   joinGame:(gameID, pID,pLat, pLong)=>{
-    return knex('usersInGame')
+    console.log(gameID, pID,pLat, pLong)
+    return knex('usersingames')
+    .returning('gid')
     .insert({
       gid: gameID,
       pid: pID,
@@ -28,19 +32,56 @@ let exportMe = {
     .where({open:true});
   },
   getActiveUsers: (gameID, capped=false)=>{
-    return knex('usersInGames')
+    return knex('usersingames')
     .select('lat','long','pid')
-    .where({gid:gamedID, captured:capped})
+    .where({gid:gameID, captured:capped})
   },
   activateGame: (gameID)=>{
-    return knex('usersInGames')
+    return knex('usersingames')
     .where({gid: gameID})
     .update({captured: false})
   },
   updateLocation: (gameID, pID,pLat, pLong)=>{
-    return knex('usersInGames')
+    return knex('usersingames')
     .where({gid: gameID, pid: pID})
-    .update({lat: pLat, long: pLong,})
+    .update({lat: pLat, long: pLong})
+  },
+  quit: (pID)=>{
+    return knex('usersingames')
+    .del('*')
+    .where({pid: pID})
+  },
+  quitController:(pID)=>{
+    return knex('game')
+    .del('*')
+    .where({pid: pID})
+  },
+  captured:(pIDTarget, pIDCapture)=>{
+    knex('usersingames')
+    .update({captured:true})
+    .where({pid: pIDTarget})
+    .then(x=>{
+      knex('users')
+      .select('caught')
+      .where({id:pIDCapture})
+      .then(x=>{
+        knex('users')
+        .where({id:pIDCapture})
+        .update({caught:x+1})
+      })
+      .catch(err=>{console.log(err)})
+    })
+    .catch(err=>{console.log(err)})
+  },
+  updateItLocation:(gID, pID, pLat, pLong)=>{
+    return knex('games')
+    .where({id:gID, pid:pID})
+    .update({startLat: pLat, startLong: pLong})
+  },
+  getGame:(gID)=>{
+    return knex('games')
+    .where({id:gID})
+    .select('*')
   }
 };
 
@@ -65,9 +106,9 @@ CREATE TABLE games(
   open      BOOL
 );
 
-CREATE TABLE usersInGames(
+CREATE TABLE usersingames(
   gid   INT REFERENCES games(id) ON DELETE CASCADE,
-  pid   INT,
+  pid   INT UNIQUE
   lat   FLOAT,
   long  FLOAT,
   captured  BOOL

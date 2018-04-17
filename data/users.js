@@ -27,21 +27,4 @@ CREATE TABLE users (
     caugh       INT
 );
 
-CREATE TABLE games(
-  id  SERIAL PRIMARY KEY,
-  pid INT,
-  name  VARCHAR,
-  startLat  FLOAT,
-  startLong FLOAT,
-  open      BOOL
-);
-
-CREATE TABLE usersInGames(
-  gid   INT REFERENCES games ('id') orders ON DELETE CASCADE,
-  pid   INT,
-  lat   FLOAT,
-  long  FLOAT,
-  captured  BOOL
-);
-
 */

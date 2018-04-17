@@ -9,12 +9,14 @@ app.get('/playAgain', placeholder)
 */
 let exportMe ={
   createGame: (req,res)=>{
-    data.createGame(req.body.gameName, req.body.pID, req.body.pLat, req.body.pLong)
+    console.log(req.body)
+    data.createGame(req.body.pID, req.body.gameName, req.body.pLat, req.body.pLong)
     .then(results=>{
       return res.status(200).send(results);
     })
     .catch(err=>{
-      res.status(300).send(err);
+      console.log(err)
+      res.status(405).send(err);
     })
   },
   joinGame: (req,res)=>{
@@ -23,17 +25,17 @@ let exportMe ={
       return res.status(200).send(results);
     })
     .catch(err=>{
-      res.status(300).send(err);
+      console.log(err)
+      res.status(405).send(err);
     })
   },
   findGame: (req, res)=>{
-    console.log('findgame called.')
     data.getGames()
     .then(results=>{
       return res.status(200).send(results);
     })
     .catch(err=>{
-      res.status(300).send(err);
+      res.status(405).send(err);
     })
   },
   getActiveUsers: (req, res)=>{
@@ -42,7 +44,7 @@ let exportMe ={
       return res.status(200).send(results);
     })
     .catch(err=>{
-      res.status(300).send(err);
+      res.status(405).send(err);
     })
   },
   playAgain: (req, res)=>{
@@ -51,7 +53,7 @@ let exportMe ={
       return res.status(200).send(results);
     })
     .catch(err=>{
-      res.status(300).send(err);
+      res.status(405).send(err);
     })
   },
   updateLocation: (req, res)=>{
@@ -60,7 +62,73 @@ let exportMe ={
       return res.status(200).send(results);
     })
     .catch(err=>{
-      res.status(300).send(err);
+      res.status(405).send(err);
+    })
+  },
+  quit: (req, res)=>{
+    data.quit(req.body.uid)
+    .then(results=>{
+      return res.status(200).send(results);
+    })
+    .catch(err=>{
+      console.log('error on quitting', req.body.uid)
+      console.log(err)
+      data.quitController(req.body.uid)
+      .then(results=>{
+        return res.status(200).send(results);
+      })
+      .catch(err=>{
+        console.log(err)
+        res.status(405).send(err);
+      })
+    })
+  },
+  deleteGame:(req, res)=>{
+    data.quitController(req.body.pID)
+    .then(results=>{
+      return res.status(200).send(results);
+    })
+    .catch(err=>{
+      res.status(405).send(err);
+    })
+  },
+  capture: (req,res)=>{
+    let plat = req.body.pLat;
+    let plong = req.body.pLong;
+    let capDistance = req.body.distance || .0002;
+    data.getActiveUsers(req.body.gID)
+    .then(results=>{
+      results.forEach(x=>{
+        if(Math.abs(x.lat-plat) + Math.abs(x.long-plong)<capDistance)
+        {
+          console.log(x.pid);
+          data.captured(x.pid, req.body.pID);
+        }
+      })
+      return res.status(200).send(results);
+    })
+    .catch(err=>{
+      console.log(err);
+      res.status(405).send(err);
+    })
+
+  },
+  updateItLocation: (req, res) => {
+    data.updateItLocation(req.body.gID, req.body.pID, req.body.pLat, req.body.pLong)
+    .then(results=>{
+      return res.status(200).send(results);
+    })
+    .catch(err=>{
+      res.status(405).send(err);
+    })
+  },
+  getItLocation:(req, res)=>{
+    data.getGame(req.body.gID)
+    .then(results=>{
+      return res.status(200).send(results);
+    })
+    .catch(err=>{
+      res.status(405).send(err);
     })
   }
 };

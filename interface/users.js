@@ -8,11 +8,11 @@ let inter = {
     })
     .catch(err=>{
       console.log(err);
-      res.status(300).send(err);
+      res.status(405).send(err);
     })
   },
   inviteUsers: (req,res)=>{
-    
+
   },
   getStats: (req,res)=>{
 
@@ -25,7 +25,7 @@ let inter = {
     })
     .catch(err=>{
       console.log(err);
-      res.status(300).send(err);
+      res.status(405).send(err);
     })
   }
 };
