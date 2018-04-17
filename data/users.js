@@ -1,6 +1,4 @@
-const env = 'development';
-const config = require('../knex')[env];
-const knex = require('knex')(config);
+const knex = require('../connection')
 
 let exportMe = {
   createUser:(name, pw)=>{
