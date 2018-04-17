@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
     table.increments('id').primary()
     table.string('username').notNullable()
     table.string('password').notNullable()
-    table.integer('gamesPlayed').notNullable().defaultsTo(0)
+    table.integer('gamesplayed').notNullable().defaultsTo(0)
     table.integer('captures').notNullable().defaultsTo(0)
     table.integer('caught').notNullable().defaultsTo(0)
   })
