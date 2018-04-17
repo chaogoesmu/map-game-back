@@ -4,8 +4,8 @@ exports.up = function(knex, Promise) {
     table.increments('id').primary()
     table.integer('pid').notNullable()
     table.string('name').notNullable()
-    table.float('startLat').notNullable()
-    table.float('startLong').notNullable()
+    table.float('startlat').notNullable()
+    table.float('startlong').notNullable()
     table.boolean('open')
   })
 };
