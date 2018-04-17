@@ -6,6 +6,7 @@ exports.up = function(knex, Promise) {
     table.string('name').notNullable()
     table.float('startLat').notNullable()
     table.float('startLong').notNullable()
+    table.boolean('open')
   })
 };
 
