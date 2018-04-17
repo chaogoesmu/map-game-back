@@ -3,15 +3,17 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3001;
 const bodyParser = require('body-parser');
+const env = 'production';
+const config = require('./knexfile')[env];
 debugger
-//let knex = require('./connection')
+const knex = require('knex')(config);
 const cors = require('cors')
 
 app.disable('x-powered-by');
 
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
-//app.use(cors({ exposedHeaders: 'Auth'}))//, allowedHeaders: '*'
-app.use(cors())//, allowedHeaders: '*'
+app.use(cors({ exposedHeaders: 'Auth'}))//, allowedHeaders: '*'
+//app.use(cors())//, allowedHeaders: '*'
 
 app.use(bodyParser.json());
 app.get('/test', (req, res) => {
